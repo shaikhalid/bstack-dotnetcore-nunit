@@ -30,6 +30,7 @@ namespace BstackNetCoreNunit
     {
         String username;
         String accessKey;
+        String appSettingsPath = "/Users/nithyamani/Projects/BstackNetCoreNunit/BstackNetCoreNunit/";
 
         [Test]
         [TestCase("chrome")]
@@ -42,10 +43,10 @@ namespace BstackNetCoreNunit
         public void Test1(String platform)
         {
             IWebDriver driver;
-           
+          
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("/Users/nithyamani/Projects/BstackNetCoreNunit/BstackNetCoreNunit/appSettings.json", false);
+                .AddJsonFile(appSettingsPath+"appSettings.json", false);
             var configuration = builder.Build();
 
 
