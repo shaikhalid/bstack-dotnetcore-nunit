@@ -26,24 +26,28 @@ namespace BstackNetCoreNunit
         public string Device { get; set; }
     }
 
-    public class Tests
+    public class BaseTest
     {
         String username;
         String accessKey;
+        public IWebDriver driver;
         String appSettingsPath = "/Users/nithyamani/Projects/BstackNetCoreNunit/BstackNetCoreNunit/";
 
-        [Test]
-        [TestCase("chrome")]
-        [TestCase("firefox")]
-        [TestCase("edge")]
-        [TestCase("safari")]
-        [TestCase("pixel")]
-        [TestCase("iPhone")]
-        [Parallelizable(ParallelScope.All)]
-        public void Test1(String platform)
+        public String platform;
+        public String profile;
+        public String session_name;
+        public String build;
+        public BaseTest(String platform, String profile, String session_name, String build)
         {
-            IWebDriver driver;
-          
+            this.platform = platform;
+            this.profile = profile;
+            this.session_name = session_name;
+            this.build = build;
+        }
+
+        [SetUp]
+        public void SetupDriver()
+        {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(appSettingsPath+"appSettings.json", false);
@@ -51,12 +55,11 @@ namespace BstackNetCoreNunit
 
 
             var credentials = new Credentials();
-            var platforms = new Platform();
-
             var credentialsSection = configuration.GetSection("credentials");
-            var platformSection = configuration.GetSection("platforms").GetSection(platform);
-
             credentials = credentialsSection.Get<Credentials>();
+
+            var platforms = new Platform();
+            var platformSection = configuration.GetSection("platforms").GetSection(platform);
             platforms = platformSection.Get<Platform>();
 
             //Console.WriteLine(credentialsClass.Username + " Accesskey:" + credentialsClass.AccessKey);
@@ -64,7 +67,6 @@ namespace BstackNetCoreNunit
 
             username = credentials.Username;
             accessKey = credentials.AccessKey;
-            
 
             OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
             capability.AddAdditionalCapability("os_version", platforms.OS_Version, true);
@@ -72,33 +74,25 @@ namespace BstackNetCoreNunit
             capability.AddAdditionalCapability("browser_version", platforms.Browser_Version, true);
             capability.AddAdditionalCapability("os", platforms.OS, true);
             capability.AddAdditionalCapability("device", platforms.Device, true);
-            capability.AddAdditionalCapability("build", ".NetCore Nunit", true); // test name
-            capability.AddAdditionalCapability("name", "with_app_settings", true); // CI/CD job or build name
+            capability.AddAdditionalCapability("build", build, true); // test name
+            capability.AddAdditionalCapability("name", session_name, true); // CI/CD job or build name
             capability.AddAdditionalCapability("browserstack.user", username, true);
             capability.AddAdditionalCapability("browserstack.key", accessKey, true);
+            //add more caps 
+            capability.AddAdditionalCapability("browserstack.debug", "true", true);
+            capability.AddAdditionalCapability("browserstack.console", "verbose", true);
+
+            if (profile.Equals("local")){
+                capability.AddAdditionalCapability("browserstack.local", "true", true);
+            }
 
             driver = new RemoteWebDriver(
               new Uri("https://hub-cloud.browserstack.com/wd/hub/"), capability
             );
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-
-            driver.Navigate().GoToUrl("https://www.google.com");
-            Console.WriteLine(driver.Title);
-            IWebElement query = driver.FindElement(By.Name("q"));
-            query.SendKeys("BrowserStack");
-            query.Submit();
-            Thread.Sleep(10);
-            String title = driver.Title;
-            Console.WriteLine(title);
-            // Setting the status of test as 'passed' or 'failed' based on the condition; if title of the web page starts with 'BrowserStack'
-            if (title.Contains("Google"))
-            {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"passed\", \"reason\": \" Title matched!\"}}");
-            }
-            else
-            {
-                ((IJavaScriptExecutor)driver).ExecuteScript("browserstack_executor: {\"action\": \"setSessionStatus\", \"arguments\": {\"status\":\"failed\", \"reason\": \" Title not matched \"}}");
-            }
+        }
+        [TearDown]
+        public void TearDownDriver()
+        {
             driver.Quit();
         }
     }
