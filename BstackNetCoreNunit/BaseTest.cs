@@ -65,8 +65,14 @@ namespace BstackNetCoreNunit
             //Console.WriteLine(credentialsClass.Username + " Accesskey:" + credentialsClass.AccessKey);
             //Console.WriteLine("Browser: " + platformClass.Browser + " BrowserVersion: " + platformClass.Browser_Version + " OS: " + platformClass.OS + " OS Version: " + platformClass.OS_Version+" Device: "+platformClass.Device);
 
+
             username = credentials.Username;
+            if (username.Equals("BROWSERSTACK_USERNAME"))
+                username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
+
             accessKey = credentials.AccessKey;
+            if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
+                accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
 
             OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
             capability.AddAdditionalCapability("os_version", platforms.OS_Version, true);
