@@ -31,7 +31,7 @@ namespace BstackNetCoreNunit
         String username;
         String accessKey;
         public IWebDriver driver;
-        String appSettingsPath = "/Users/nithyamani/Projects/BstackNetCoreNunit/BstackNetCoreNunit/";
+        String appSettingsPath = "BstackNetCoreNunit/";
 
         public String platform;
         public String profile;
