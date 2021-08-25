@@ -38,6 +38,7 @@ namespace BstackNetCoreNunit
         public String profile;
         public String session_name;
         public String build;
+
         public BaseTest(String platform, String profile, String session_name, String build)
         {
             this.platform = platform;
@@ -79,6 +80,8 @@ namespace BstackNetCoreNunit
             if (buildName == null || buildName.Equals(""))
                 buildName = build; //set via TestFixture value
 
+            String localIdentifier = Environment.GetEnvironmentVariable("BROWSERSTACK_LOCAL_IDENTIFIER");
+
             OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
             capability.AddAdditionalCapability("os_version", platforms.OS_Version, true);
             capability.AddAdditionalCapability("browser", platforms.Browser, true);
@@ -95,6 +98,8 @@ namespace BstackNetCoreNunit
 
             if (profile.Equals("local")){
                 capability.AddAdditionalCapability("browserstack.local", "true", true);
+                if(localIdentifier!=null || !localIdentifier.Equals(""))
+                    capability.AddAdditionalCapability("browserstack.localIdentifier", localIdentifier, true);
             }
             else
             {
