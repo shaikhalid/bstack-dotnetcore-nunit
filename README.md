@@ -5,10 +5,10 @@
 - Get your credentials from here https://www.browserstack.com/accounts/settings
 
 # Commands to trigger tests
-- *Build project* - `dotnet build`
-- *Single test* - `dotnet test --filter SingleTestCase`. `SingleTestCase` is the name of the test method under `[Test]` annotation to be executed.
-- *Local test* - `dotnet test --filter LocalTestCase` 
-- *Parallel test* - `dotnet test --filter ParallelTestCase -- NUnit.NumberOfTestWorkers=4`. `NUnit.NumberOfTestWorkers` is basically setting the no.of parallel threads to be triggered concurrently. 
+- **Build project** - `dotnet build`
+- **Single test** - `dotnet test --filter SingleTestCase`. `SingleTestCase` is the name of the test method under `[Test]` annotation to be executed.
+- **Local test** - `dotnet test --filter LocalTestCase` 
+- **Parallel test** - `dotnet test --filter ParallelTestCase -- NUnit.NumberOfTestWorkers=4`. `NUnit.NumberOfTestWorkers` is basically setting the no.of parallel threads to be triggered concurrently. 
 Note: Parallel count can also be updated in the `AssemblyInfo.cs` file as `LevelOfParallelism`
 `[assembly:LevelOfParallelism(3)]`
 
