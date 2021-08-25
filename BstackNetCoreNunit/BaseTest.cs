@@ -98,7 +98,7 @@ namespace BstackNetCoreNunit
 
             if (profile.Equals("local")){
                 capability.AddAdditionalCapability("browserstack.local", "true", true);
-                if(localIdentifier!=null || !localIdentifier.Equals(""))
+                if(localIdentifier!=null && !localIdentifier.Equals(""))
                     capability.AddAdditionalCapability("browserstack.localIdentifier", localIdentifier, true);
             }
             else
