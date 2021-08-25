@@ -25,13 +25,13 @@ namespace BstackNetCoreNunit
         public string Browser_Version { get; set; }
         public string Device { get; set; }
     }
-
+    
     public class BaseTest
     {
         String username;
         String accessKey;
         public IWebDriver driver;
-        String appSettingsPath = "/Users/nithyamani/Projects/BstackNetCoreNunit/BstackNetCoreNunit/";
+        //String appSettingsPath = "BstackNetCoreNunit/BstackNetCoreNunit/";
 
         public String platform;
         public String profile;
@@ -50,7 +50,7 @@ namespace BstackNetCoreNunit
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(appSettingsPath+"appSettings.json", false);
+                .AddJsonFile("appSettings.json", false);
             var configuration = builder.Build();
 
 
@@ -90,6 +90,10 @@ namespace BstackNetCoreNunit
 
             if (profile.Equals("local")){
                 capability.AddAdditionalCapability("browserstack.local", "true", true);
+            }
+            else
+            {
+                capability.AddAdditionalCapability("browserstack.local", "false", true);
             }
 
             driver = new RemoteWebDriver(
