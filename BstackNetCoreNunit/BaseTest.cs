@@ -30,6 +30,7 @@ namespace BstackNetCoreNunit
     {
         String username;
         String accessKey;
+        String buildName;
         public IWebDriver driver;
        
 
@@ -69,10 +70,14 @@ namespace BstackNetCoreNunit
             username = credentials.Username;
             if (username.Equals("BROWSERSTACK_USERNAME"))
                 username = Environment.GetEnvironmentVariable("BROWSERSTACK_USERNAME");
-
+         
             accessKey = credentials.AccessKey;
             if (accessKey.Equals("BROWSERSTACK_ACCESS_KEY"))
                 accessKey = Environment.GetEnvironmentVariable("BROWSERSTACK_ACCESS_KEY");
+          
+            buildName = Environment.GetEnvironmentVariable("BROWSERSTACK_BUILD_NAME");
+            if (buildName == null || buildName.Equals(""))
+                buildName = build; //set via TestFixture value
 
             OpenQA.Selenium.Chrome.ChromeOptions capability = new OpenQA.Selenium.Chrome.ChromeOptions();
             capability.AddAdditionalCapability("os_version", platforms.OS_Version, true);
@@ -80,8 +85,8 @@ namespace BstackNetCoreNunit
             capability.AddAdditionalCapability("browser_version", platforms.Browser_Version, true);
             capability.AddAdditionalCapability("os", platforms.OS, true);
             capability.AddAdditionalCapability("device", platforms.Device, true);
-            capability.AddAdditionalCapability("build", build, true); // test name
-            capability.AddAdditionalCapability("name", session_name, true); // CI/CD job or build name
+            capability.AddAdditionalCapability("build", buildName, true); 
+            capability.AddAdditionalCapability("name", session_name, true); 
             capability.AddAdditionalCapability("browserstack.user", username, true);
             capability.AddAdditionalCapability("browserstack.key", accessKey, true);
             //add more caps 
