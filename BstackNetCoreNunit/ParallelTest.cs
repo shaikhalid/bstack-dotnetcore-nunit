@@ -1,4 +1,5 @@
 ﻿using System;
+
 using NUnit.Framework;
 using OpenQA.Selenium;
 
@@ -10,7 +11,8 @@ namespace BstackNetCoreNunit
     [TestFixture("safari", "parallel","parallel_safari", ".NetCore Nunit")]
     [TestFixture("pixel", "parallel","parallel_pixel", ".NetCore Nunit")]
     [TestFixture("iPhone", "parallel","parallel_iPhone", ".NetCore Nunit")]
-    [Parallelizable(ParallelScope.All)]
+    [Parallelizable(ParallelScope.Fixtures)]
+   
     public class ParallelTest : BaseTest
     {
 
